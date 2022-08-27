@@ -32,6 +32,28 @@ namespace dotnet_rpg.Services.CharacterService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+        {
+            ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+
+
+            try {
+
+                Charecter character = charecters.First(c => c.Id == id);
+                
+                charecters.Remove(character);
+                serviceResponse.Data = charecters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+
+            } catch(Exception e)
+            {
+                serviceResponse.Seccess = false;
+                serviceResponse.Message = e.Message;
+            }
+
+            return serviceResponse;
+        
+        }
+
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             return new ServiceResponse<List<GetCharacterDto>>
@@ -56,14 +78,14 @@ namespace dotnet_rpg.Services.CharacterService
 
                 Charecter character = charecters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
                 
-                _mapper.Map(updatedCharacter, character);
+                //_mapper.Map(updatedCharacter, character);
 
-                // character.Name = updatedCharacter.Name;
-                // character.HitPoints = updatedCharacter.HitPoints;
-                // character.Strenght = updatedCharacter.Strenght;
-                // character.Defense = updatedCharacter.Defense;
-                // character.Intelligence = updatedCharacter.Intelligence;
-                // character.Class = updatedCharacter.Class;
+                character.Name = updatedCharacter.Name;
+                character.HitPoints = updatedCharacter.HitPoints;
+                character.Strenght = updatedCharacter.Strenght;
+                character.Defense = updatedCharacter.Defense;
+                character.Intelligence = updatedCharacter.Intelligence;
+                character.Class = updatedCharacter.Class;
 
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
 
