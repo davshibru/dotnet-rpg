@@ -50,16 +50,20 @@ namespace dotnet_rpg.Services.CharacterService
 
         public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
         {
-            var serviceResponse = new ServiceResponse<GetCharacterDto>();
-            Charecter character = charecters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+            ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
 
             try {
-                character.Name = updatedCharacter.Name;
-                character.HitPoints = updatedCharacter.HitPoints;
-                character.Strenght = updatedCharacter.Strenght;
-                character.Defense = updatedCharacter.Defense;
-                character.Intelligence = updatedCharacter.Intelligence;
-                character.Class = updatedCharacter.Class;
+
+                Charecter character = charecters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+                
+                _mapper.Map(updatedCharacter, character);
+
+                // character.Name = updatedCharacter.Name;
+                // character.HitPoints = updatedCharacter.HitPoints;
+                // character.Strenght = updatedCharacter.Strenght;
+                // character.Defense = updatedCharacter.Defense;
+                // character.Intelligence = updatedCharacter.Intelligence;
+                // character.Class = updatedCharacter.Class;
 
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
 
