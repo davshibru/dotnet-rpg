@@ -22,6 +22,21 @@ namespace dotnet_rpg.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("CharecterSkill", b =>
+                {
+                    b.Property<int>("CharactersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharactersId", "SkillsId");
+
+                    b.HasIndex("SkillsId");
+
+                    b.ToTable("CharecterSkill");
+                });
+
             modelBuilder.Entity("dotnet_rpg.Models.Charecter", b =>
                 {
                     b.Property<int>("Id")
@@ -76,9 +91,6 @@ namespace dotnet_rpg.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CharecterId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Damage")
                         .HasColumnType("int");
 
@@ -87,8 +99,6 @@ namespace dotnet_rpg.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CharecterId");
 
                     b.ToTable("Skills");
 
@@ -164,6 +174,21 @@ namespace dotnet_rpg.Migrations
                     b.ToTable("Weapons");
                 });
 
+            modelBuilder.Entity("CharecterSkill", b =>
+                {
+                    b.HasOne("dotnet_rpg.Models.Charecter", null)
+                        .WithMany()
+                        .HasForeignKey("CharactersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotnet_rpg.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("dotnet_rpg.Models.Charecter", b =>
                 {
                     b.HasOne("dotnet_rpg.Models.User", "User")
@@ -171,13 +196,6 @@ namespace dotnet_rpg.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("dotnet_rpg.Models.Skill", b =>
-                {
-                    b.HasOne("dotnet_rpg.Models.Charecter", null)
-                        .WithMany("Skills")
-                        .HasForeignKey("CharecterId");
                 });
 
             modelBuilder.Entity("dotnet_rpg.Models.Weapon", b =>
@@ -193,8 +211,6 @@ namespace dotnet_rpg.Migrations
 
             modelBuilder.Entity("dotnet_rpg.Models.Charecter", b =>
                 {
-                    b.Navigation("Skills");
-
                     b.Navigation("Weapon")
                         .IsRequired();
                 });
